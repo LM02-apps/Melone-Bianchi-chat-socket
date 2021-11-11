@@ -35,9 +35,17 @@ public class ListaClient
         }
     }
 
-    public void InvioPrivato(String messaggio, String nomeClientPrivato) throws IOException
-    {
-        clientRunning.get(nomeClientPrivato).InviaClient(messaggio);
+    public void InvioPrivato(String messaggio, String nomeClientPrivato, String clientChiamata) throws IOException
+    {   
+        if(clientRunning.containsKey(nomeClientPrivato))
+        {
+            clientRunning.get(nomeClientPrivato).InviaClient(messaggio);
+        }
+        else
+        {
+            messaggio="Nome client inesistente";
+            clientRunning.get(clientChiamata).InviaClient(messaggio);
+        }
     }
 
     public boolean isEmpty()    //Controlla se l'array è vuoto

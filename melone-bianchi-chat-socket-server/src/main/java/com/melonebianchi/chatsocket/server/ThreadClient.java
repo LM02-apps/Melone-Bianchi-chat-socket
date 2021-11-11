@@ -93,7 +93,7 @@ public class ThreadClient extends Thread
                     }
                 }
                 
-                lista.InvioPrivato(stringaRicevuta, nomeutente);
+                lista.InvioPrivato(stringaRicevuta, nomeutente,Thread.currentThread().getName());
            }
            else if(stringaRicevuta.contains("/exit"))
            {

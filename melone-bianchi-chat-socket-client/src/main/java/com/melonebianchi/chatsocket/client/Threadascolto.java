@@ -28,15 +28,15 @@ public class Threadascolto extends Thread
                
                 rispostaserver=inserver.readLine();
 
-                if (rispostaserver.contains("END"))
+                if (rispostaserver.equals("END"))
                 {
-                    System.out.println("Chiusura connessione...")
+                    System.out.println("Chiusura connessione...");
                     inserver.close();
                     outserver.close();
                     socketclient.close();
                     break;
                 }
-                
+
                 System.out.println(rispostaserver);
 
             }

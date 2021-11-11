@@ -48,7 +48,7 @@ public class Client
                 
                 outversoserver.writeBytes(nomehost + '\n');
                 stringarispostaserver=indalserver.readLine();
-                if (stringarispostaserver=="OK")
+                if (stringarispostaserver.equals("OK"))
                 {
                     controllo=true;
                 }
@@ -147,7 +147,7 @@ public class Client
                         } 
                     }
 
-                    else if (stringautente.contains("/exit "))
+                    else if (stringautente.contains("/exit"))
                     {
                         uscita=false;
                     }
@@ -164,7 +164,7 @@ public class Client
                 while(uscita);
                 
 
-                if (stringautente.contains("/exit "))
+                if (stringautente.contains("/exit"))
                 {
                     break;
                 }
