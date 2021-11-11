@@ -41,6 +41,11 @@ public class ConsoleServer extends Thread
                     messaggio = tastiera.readLine();
                     lista.InvioTotale("Server", messaggio);
                 }
+                else if(comando.equals("/clear"))
+                {
+                    for(int i = 0; i < 30; i++)
+                        System.out.println("\n");
+                }
             }
         } 
         catch (IOException e) 

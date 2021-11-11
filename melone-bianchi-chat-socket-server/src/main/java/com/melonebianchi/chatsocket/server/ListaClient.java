@@ -43,7 +43,7 @@ public class ListaClient
         }
         else
         {
-            messaggio="Nome client inesistente";
+            messaggio = "Nome client inesistente";
             clientRunning.get(clientChiamata).InviaClient(messaggio);
         }
     }

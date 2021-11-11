@@ -53,8 +53,9 @@ public class ThreadClient extends Thread
 
         for(;ciclo;)
         {
+            System.out.println("Server:$");
             stringaRicevuta = inDalClient.readLine();
-            System.out.println("Il Server Ha Ricevuto Da " + Thread.currentThread().getName() + ": " + stringaRicevuta);  
+            System.out.println("Server:$" + Thread.currentThread().getName() + ": " + stringaRicevuta);  
             
             if(lista.getSize() >= 2 || stringaRicevuta.equals("/exit"))
             {
@@ -93,7 +94,7 @@ public class ThreadClient extends Thread
                     }
                 }
                 
-                lista.InvioPrivato(stringaRicevuta, nomeutente,Thread.currentThread().getName());
+                lista.InvioPrivato(stringaRicevuta, nomeutente, Thread.currentThread().getName());
            }
            else if(stringaRicevuta.contains("/exit"))
            {

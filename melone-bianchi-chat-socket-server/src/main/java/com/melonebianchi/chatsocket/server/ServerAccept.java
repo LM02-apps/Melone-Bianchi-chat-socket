@@ -25,7 +25,7 @@ public class ServerAccept
         {
             server = new ServerSocket(porta);   //Il Server si avvia aprendo la porta
 
-            System.out.println("Server partito");
+            System.out.println("Server:$ Start");
 
             ListaClient lista = new ListaClient();
 
@@ -35,7 +35,7 @@ public class ServerAccept
 
             for(;;) //For per instanziare un Thread ogni volta che si connette un client
             {
-                System.out.println("Server in attesa...");
+                System.out.println("Server:$ In Attesa...");
 
                   client = server.accept();    //Il Server attende
 

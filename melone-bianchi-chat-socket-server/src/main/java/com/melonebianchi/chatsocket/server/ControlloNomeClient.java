@@ -35,7 +35,7 @@ public class ControlloNomeClient extends Thread
                if(lista.Input(nomeClient))
                {
                    uscita = true;
-                   outVersoClient.writeBytes("Utente Gia' Esistente" + "\n");
+                   outVersoClient.writeBytes("Server: Utente Gia' Esistente" + "\n");
                }
                else
                {
@@ -45,7 +45,7 @@ public class ControlloNomeClient extends Thread
 
            }while(uscita);
 
-          System.out.println("Server: Client Connesso: " + nomeClient);
+          System.out.println("Server:$ Client Connesso: " + nomeClient);
 
           ThreadClient avvioThread = new ThreadClient(client, lista, inDalClient, nomeClient, outVersoClient);
 

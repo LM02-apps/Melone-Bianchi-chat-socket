@@ -1,21 +1,20 @@
 package com.melonebianchi.chatsocket.client;
 
 import java.io.DataOutputStream;
-
-
 import java.io.*;
 import java.net.*;
 
 public class Threadascolto extends Thread
 {
-    private BufferedReader inserver;
-    private String rispostaserver;
-    DataOutputStream outserver;
-    Socket socketclient;
-    public Threadascolto(BufferedReader inserver, DataOutputStream outserver, Socket socketclient) {
-        this.inserver = inserver;
-        this.outserver=outserver;
-        this.socketclient=socketclient;
+    private BufferedReader inServer;
+    private String rispostaServer;
+    DataOutputStream outServer;
+    Socket socketClient;
+
+    public Threadascolto(BufferedReader inServer, DataOutputStream outServer, Socket socketClient) {
+        this.inServer = inServer;
+        this.outServer = outServer;
+        this.socketClient = socketClient;
     }
 
     public void run()
@@ -26,18 +25,22 @@ public class Threadascolto extends Thread
             for(;;)
             {
                
-                rispostaserver=inserver.readLine();
+                rispostaServer=inServer.readLine();
 
-                if (rispostaserver.equals("END"))
+                if (rispostaServer.equals("END"))
                 {
                     System.out.println("Chiusura connessione...");
-                    inserver.close();
-                    outserver.close();
-                    socketclient.close();
+
+                    inServer.close();
+                    outServer.close();
+                    socketClient.close();
+
+                    System.out.println("Connessione Terminata");
+
                     break;
                 }
-
-                System.out.println(rispostaserver);
+                rispostaServer = rispostaServer.replace("Thread-0:", "Server:");
+                System.out.println(rispostaServer);
 
             }
             

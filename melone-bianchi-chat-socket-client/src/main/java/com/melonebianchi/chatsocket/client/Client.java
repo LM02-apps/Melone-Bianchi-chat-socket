@@ -6,56 +6,65 @@ import java.net.*;
 
 public class Client 
 {
-    static String nomeserver = "192.168.1.25";
-    int portaserver = 6778;
+    static String nomeServer = "localhost";
+    int portaServer = 6778;
     Socket msocket;
     BufferedReader tastiera;
-    String stringautente;
-    String nomehost;
-    String stringarispostaserver;
-    DataOutputStream outversoserver;
-    BufferedReader indalserver;
-    Threadascolto mthreadascolto;
+    BufferedReader indalServer;
+    DataOutputStream outVersoServer;
     boolean controllo=false;
+    boolean ciclo = true;
+    boolean uscita = true;
     String messaggio;
+    String stringaUtente;
+    String nomehost;
+    String stringaRispostaServer;
+    Threadascolto threadAscolto;
 
     // main client
     public static void main(String[] args) 
     {
-        Client mclient = new Client();
+        Client client = new Client();
         
 
-        mclient.connetti();
-        mclient.comunica();
+        client.Connetti();
+        client.Comunica();
     }
 
-    public Socket connetti() 
+    public Socket Connetti() 
     {
 
         System.out.println("Client in esecuzione");
-        try {
+
+        try 
+        {
             tastiera = new BufferedReader(new InputStreamReader(System.in));
+
             System.out.println("Inserire nome client:");
+
             nomehost = tastiera.readLine();
-            msocket = new Socket(nomeserver, portaserver);
+            msocket = new Socket(nomeServer, portaServer);
 
 
-            outversoserver = new DataOutputStream(msocket.getOutputStream());
-            indalserver = new BufferedReader(new InputStreamReader(msocket.getInputStream()));
+            outVersoServer = new DataOutputStream(msocket.getOutputStream());
+            indalServer = new BufferedReader(new InputStreamReader(msocket.getInputStream()));
             
             do
             {
                 
-                outversoserver.writeBytes(nomehost + '\n');
-                stringarispostaserver=indalserver.readLine();
-                if (stringarispostaserver.equals("OK"))
+                outVersoServer.writeBytes(nomehost + '\n');
+
+                stringaRispostaServer = indalServer.readLine();
+
+                if (stringaRispostaServer.equals("OK"))
                 {
-                    controllo=true;
+                    controllo = true;
                 }
                 else
                 {
-                    System.out.println(stringarispostaserver);
-                    System.out.println("Reinserisci:");
+                    System.out.println(stringaRispostaServer);
+
+                    System.out.println("Reinserire Nuovo Nome:");
                     nomehost = tastiera.readLine();
                 }
 
@@ -63,46 +72,47 @@ public class Client
                 
             
 
-            mthreadascolto=new Threadascolto(indalserver,outversoserver,msocket); //Guardare per bene
-            mthreadascolto.start();
+            threadAscolto = new Threadascolto(indalServer, outVersoServer, msocket); //Guardare per bene
+            threadAscolto.start();
 
-        } catch (UnknownHostException e) {
+        } 
+        catch (UnknownHostException e)
+        {
             System.err.println("Host sconosciuto");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        }
+         catch (Exception e) 
+        {
             System.out.println("Errore connessione");
             System.exit(1);
         }
+
         return msocket;
     }
 
-    public void comunica() 
+    public void Comunica() 
     {
 
-        for (;;) 
+        for(;ciclo;) 
         {
             try 
             {
-                boolean uscita = true;
-
                 do
                 {
                     System.out.println("Inserisci la stringa" + '\n');
-                    stringautente = tastiera.readLine();
+                    stringaUtente = tastiera.readLine();
 
 
-                    String nomeutente = "";
+                    String nomeUtente = "";
 
-                    if (stringautente.contains("/private "))
+                    if(stringaUtente.contains("/private "))
                     {
-                        for (int i = 9; i < stringautente.length(); i++)
+                        for(int i = 9; i < stringaUtente.length(); i++)
                         {
                             
-                            if (stringautente.charAt(i) != ' ')
+                            if(stringaUtente.charAt(i) != ' ')
                             {
-                                nomeutente += stringautente.charAt(i);
+                                nomeUtente += stringaUtente.charAt(i);
                             }
-
                             else
                             {
                                 uscita = false;
@@ -110,75 +120,58 @@ public class Client
                             }
                         }
 
-                        for (int i = 9+nomeutente.length(); i < stringautente.length(); i++)
+                        for(int i = 9 + nomeUtente.length(); i < stringaUtente.length(); i++)
                         {
-                            messaggio += stringautente.charAt(i);
+                            messaggio += stringaUtente.charAt(i);
                         }
                         
-                        if(messaggio.isEmpty()) 
-                        {
-                            System.out.println("Messaggio vuoto,riprovare"); 
-                            uscita=true;
-                        }
-                        
-                        else
-                        {
-                            uscita=false;
-                        }
+                        isEmpty();
                     }
-
-
-                    else if (stringautente.contains("/all ")) 
+                    else if(stringaUtente.contains("/all ")) 
                     {
-                        for (int i = 4; i < stringautente.length(); i++)
+                        for (int i = 4; i < stringaUtente.length(); i++)
                         {
-                            messaggio += stringautente.charAt(i);
+                            messaggio += stringaUtente.charAt(i);
                         }
                         
-                        if(messaggio.isEmpty()) 
-                        {
-                            System.out.println("Messaggio vuoto,riprovare"); 
-                            uscita=true;
-                        }
-                        
-                        else
-                        {
-                            uscita=false;
-                        } 
+                        isEmpty();
                     }
-
-                    else if (stringautente.contains("/exit"))
+                    else if(stringaUtente.contains("/exit"))
                     {
-                        uscita=false;
+                        uscita = false;
+                        ciclo = false;
                     }
-
-
                     else
                     {
-                        System.out.println("Errore input,riprovare"); 
+                        System.out.println("Errore input, riprovare"); 
                         uscita = true;
                     }
-
-
                 }
                 while(uscita);
                 
-
-                if (stringautente.contains("/exit"))
-                {
-                    break;
-                }
-
                 System.out.println("invio stringa");
-                outversoserver.writeBytes(stringautente + '\n');
-
-                
+                outVersoServer.writeBytes(stringaUtente + '\n');               
             
-            } catch (Exception e) {
+            } 
+            catch (Exception e) 
+            {
                 System.out.println(e.getMessage());
                 System.exit(1);
             }
         }
 
+    }
+
+    public void isEmpty()
+    {
+        if(messaggio.isEmpty()) 
+        {
+             System.out.println("Messaggio vuoto,riprovare"); 
+             uscita = true;
+        }                
+        else
+        {
+            uscita = false;
+        }
     }
 }
