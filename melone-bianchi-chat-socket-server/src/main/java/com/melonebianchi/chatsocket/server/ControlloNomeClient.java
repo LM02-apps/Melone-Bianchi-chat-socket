@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+
 public class ControlloNomeClient extends Thread
 {
     Socket client;
@@ -14,11 +17,13 @@ public class ControlloNomeClient extends Thread
     String nomeClient;
     ListaClient lista;
     boolean uscita;
+    JTextArea chatMessaggio;
 
-    public ControlloNomeClient(Socket client, ListaClient lista)
+    public ControlloNomeClient(Socket client, ListaClient lista, JTextArea chatMessaggio)
     {
         this.client = client;
         this.lista = lista;
+        this.chatMessaggio = chatMessaggio;
     }
 
     public void run()
@@ -45,9 +50,9 @@ public class ControlloNomeClient extends Thread
 
            }while(uscita);
 
-          System.out.println("Server:$ Client Connesso: " + nomeClient);
+           chatMessaggio.append("Server:$ Client Connesso: " + nomeClient + "\n");
 
-          ThreadClient avvioThread = new ThreadClient(client, lista, inDalClient, nomeClient, outVersoClient);
+          ThreadClient avvioThread = new ThreadClient(client, lista, inDalClient, nomeClient, outVersoClient, chatMessaggio);
 
           avvioThread.start();
 

@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+
 public class ServerAccept
 {
     private int porta;                  //Porta del Server
@@ -12,7 +15,8 @@ public class ServerAccept
     String nomeClient;
     String stringRicevuta = null;       //Variabile per l'input Client Stringa
     Socket client;
-    
+    ConsoleServer ConsoleServer;
+    JTextArea chatMessaggi = new JTextArea();    
 
     public ServerAccept(int porta) 
     {
@@ -29,17 +33,17 @@ public class ServerAccept
 
             ListaClient lista = new ListaClient();
 
-            ConsoleServer ConsoleServer = new ConsoleServer(server, lista);
-
-            ConsoleServer.start();
+            
+            new ConsoleServer(server, lista, chatMessaggi);
 
             for(;;) //For per instanziare un Thread ogni volta che si connette un client
             {
-                System.out.println("Server:$ In Attesa...");
+                System.out.println();
+                chatMessaggi.append("Server:$ In Attesa..." + "\n");
 
                   client = server.accept();    //Il Server attende
 
-                ControlloNomeClient controlloNomeClient = new ControlloNomeClient(client, lista);
+                ControlloNomeClient controlloNomeClient = new ControlloNomeClient(client, lista, chatMessaggi);
 
                 controlloNomeClient.start();
             }

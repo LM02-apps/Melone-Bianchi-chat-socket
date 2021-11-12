@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JTextArea;
+
 public class ThreadClient extends Thread
 {
     String stringaRicevuta;
@@ -14,15 +16,17 @@ public class ThreadClient extends Thread
     BufferedReader inDalClient;
     DataOutputStream outVersoClient;    
     boolean ciclo = true;
+    JTextArea chatMessaggio;
     final static String messaggioAbbandono = "Ha Abbandonato La Chat";
 
-    public ThreadClient(Socket socket, ListaClient lista, BufferedReader inDalClient, String nomeClient, DataOutputStream outVersoClient) //Costruttore 
+    public ThreadClient(Socket socket, ListaClient lista, BufferedReader inDalClient, String nomeClient, DataOutputStream outVersoClient, JTextArea chatMessaggio) //Costruttore 
     {
         this.client = socket;
         this.lista = lista;
         this.inDalClient = inDalClient;
         this.nomeClient = nomeClient;
         this.outVersoClient = outVersoClient;
+        this.chatMessaggio = chatMessaggio;
     }
 
     public void run()
@@ -53,10 +57,10 @@ public class ThreadClient extends Thread
 
         for(;ciclo;)
         {
-            System.out.println("Server:$");
+            chatMessaggio.append("Server:$" + "\n");
             stringaRicevuta = inDalClient.readLine();
-            System.out.println("Server:$" + Thread.currentThread().getName() + ": " + stringaRicevuta);  
-            
+            chatMessaggio.append("Server:$" + Thread.currentThread().getName() + ": " + stringaRicevuta + "\n");
+                
             if(lista.getSize() >= 2 || stringaRicevuta.equals("/exit"))
             {
                 Comando();
@@ -77,7 +81,7 @@ public class ThreadClient extends Thread
            }
            else if (stringaRicevuta.contains("/private "))
            {
-                String nomeutente="";
+                String nomeUtente ="";
 
                 PulisciStringa();
 
@@ -85,16 +89,16 @@ public class ThreadClient extends Thread
                 {
                     if (stringaRicevuta.charAt(i) != ' ')
                     {
-                        nomeutente += stringaRicevuta.charAt(i);
+                        nomeUtente += stringaRicevuta.charAt(i);
                     }
                     else
                     {
-                        stringaRicevuta = stringaRicevuta.replace(nomeutente, "");
+                        stringaRicevuta = stringaRicevuta.replace(nomeUtente, "");
                         break;
                     }
                 }
                 
-                lista.InvioPrivato(stringaRicevuta, nomeutente, Thread.currentThread().getName());
+                lista.InvioPrivato(stringaRicevuta, nomeUtente, Thread.currentThread().getName());
            }
            else if(stringaRicevuta.contains("/exit"))
            {
