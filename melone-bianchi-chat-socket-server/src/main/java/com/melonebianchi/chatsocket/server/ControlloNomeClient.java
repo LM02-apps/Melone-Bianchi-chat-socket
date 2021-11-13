@@ -5,8 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 public class ControlloNomeClient extends Thread

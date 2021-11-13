@@ -94,20 +94,21 @@ public class ConsoleServer extends JFrame implements ActionListener
         pannelloChat.setBackground(Color.DARK_GRAY);
 
         pannelloPrincipale.setLayout(null);
-        pannelloPrincipale.setBackground(Color.LIGHT_GRAY);
+        pannelloPrincipale.setBackground(Color.DARK_GRAY);
         pannelloPrincipale.setBounds(20, 0, 50, 20);
 
         DefaultCaret caret = (DefaultCaret)chatMessaggio.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         chatMessaggio.setBounds(10, 10, 300, 180);
-        chatMessaggio.setBackground(Color.DARK_GRAY);   
+        chatMessaggio.setBackground(Color.BLACK);   
         chatMessaggio.setForeground(Color.WHITE); 
         chatMessaggio.setEditable(false);
         
         input.setBounds(133, 210, 200, 20);
         input.setFont(f);
         indicazione.setBounds(10, 210, 200, 20);
+        indicazione.setForeground(Color.WHITE);
         bottoneInput.setBounds(350, 210, 80, 20);
 
         this.setSize(500, 300);

@@ -3,8 +3,6 @@ package com.melonebianchi.chatsocket.server;
 import java.io.BufferedReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 public class ServerAccept
@@ -39,7 +37,7 @@ public class ServerAccept
             for(;;) //For per instanziare un Thread ogni volta che si connette un client
             {
                 System.out.println();
-                chatMessaggi.append("Server:$ In Attesa..." + "\n");
+                chatMessaggi.append("\n" + "Server:$ In Attesa..." + "\n");
 
                   client = server.accept();    //Il Server attende
 
