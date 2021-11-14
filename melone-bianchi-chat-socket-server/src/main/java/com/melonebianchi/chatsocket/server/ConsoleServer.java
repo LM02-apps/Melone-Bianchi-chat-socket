@@ -21,7 +21,7 @@ public class ConsoleServer extends JFrame implements ActionListener
     Container c = new Container();
     JPanel pannelloPrincipale = new JPanel();
     JPanel pannelloChat = new JPanel();
-    JLabel indicazione = new JLabel("Inserire Messaggio =");
+    JLabel indicazione = new JLabel("Inserire Messaggio");
     JButton bottoneInput = new JButton("Esegui");
     JTextField input = new JTextField(50);
     JTextArea chatMessaggio;
@@ -105,11 +105,11 @@ public class ConsoleServer extends JFrame implements ActionListener
         chatMessaggio.setForeground(Color.WHITE); 
         chatMessaggio.setEditable(false);
         
-        input.setBounds(145, 210, 200, 20);
+        input.setBounds(153, 210, 200, 20);
         input.setFont(f);
-        indicazione.setBounds(5, 210, 200, 20);
+        indicazione.setBounds(7, 210, 200, 20);
         indicazione.setForeground(Color.WHITE);
-        bottoneInput.setBounds(360, 210, 90, 20);
+        bottoneInput.setBounds(370, 210, 90, 20);
 
         //this.setSize(500, 300);      
 
