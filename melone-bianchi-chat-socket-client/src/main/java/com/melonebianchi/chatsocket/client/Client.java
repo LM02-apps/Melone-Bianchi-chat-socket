@@ -6,7 +6,7 @@ import java.net.*;
 
 public class Client 
 {
-    static String nomeServer = "localhost";
+    static String nomeServer = "192.168.1.182";
     int portaServer = 6778;
     Socket msocket;
     BufferedReader tastiera;

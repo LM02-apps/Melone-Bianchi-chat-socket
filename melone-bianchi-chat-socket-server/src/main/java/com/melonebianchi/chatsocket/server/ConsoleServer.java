@@ -105,18 +105,13 @@ public class ConsoleServer extends JFrame implements ActionListener
         chatMessaggio.setForeground(Color.WHITE); 
         chatMessaggio.setEditable(false);
         
-        input.setBounds(133, 210, 200, 20);
+        input.setBounds(145, 210, 200, 20);
         input.setFont(f);
-        indicazione.setBounds(10, 210, 200, 20);
+        indicazione.setBounds(5, 210, 200, 20);
         indicazione.setForeground(Color.WHITE);
-        bottoneInput.setBounds(350, 210, 80, 20);
+        bottoneInput.setBounds(360, 210, 90, 20);
 
-        this.setSize(500, 320);
-        this.setLocationRelativeTo(null);
-        this.setEnabled(true);
-        this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        //this.setSize(500, 300);      
 
         pannelloChat.add(chatMessaggio);
         JScrollPane scrollPane = new JScrollPane(chatMessaggio);
@@ -130,6 +125,13 @@ public class ConsoleServer extends JFrame implements ActionListener
         c.add(pannelloChat);
         c.add(pannelloPrincipale);
 
+        this.setSize(500, 300);
+        this.setLocationRelativeTo(null);
+        this.setEnabled(true);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false); 
+        
         bottoneInput.addActionListener(this);
     }
 
