@@ -111,7 +111,7 @@ public class ConsoleServer extends JFrame implements ActionListener
         indicazione.setForeground(Color.WHITE);
         bottoneInput.setBounds(350, 210, 80, 20);
 
-        this.setSize(500, 300);
+        this.setSize(500, 320);
         this.setLocationRelativeTo(null);
         this.setEnabled(true);
         this.setVisible(true);
