@@ -109,9 +109,7 @@ public class ConsoleServer extends JFrame implements ActionListener
         input.setFont(f);
         indicazione.setBounds(7, 210, 200, 20);
         indicazione.setForeground(Color.WHITE);
-        bottoneInput.setBounds(370, 210, 90, 20);
-
-        //this.setSize(500, 300);      
+        bottoneInput.setBounds(370, 210, 90, 20);     
 
         pannelloChat.add(chatMessaggio);
         JScrollPane scrollPane = new JScrollPane(chatMessaggio);
