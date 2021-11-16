@@ -31,7 +31,7 @@ public class Client extends JFrame implements ActionListener
     Socket msocket;                                 // Socket per poter instaurare una connessione
     BufferedReader indalServer;                     // Buffered per leggere i messaggi che il Server ci invia
     DataOutputStream outVersoServer;                // DataOutput per inviare al Server i nostri messaggi
-    String messaggio;                               // Variabile per contenere il messaggio che vogliamo inviare
+    String messaggio = "";                          // Variabile per contenere il messaggio che vogliamo inviare
     String stringaUtente;                           // Variabile per l'inserimento del comando
     String nomehost;                                // Variabile per inserire l'host in caso volessimo scrivere ad un Client
     String stringaRispostaServer;                   // Variabile per contenere la risposta del Server
@@ -46,7 +46,7 @@ public class Client extends JFrame implements ActionListener
     JLabel indicazioneNomeHost = new JLabel("Inserire Nome Host");          // Indicazione di Input per l'utente
     JButton bottoneInput = new JButton("Esegui");                           // Bottone di input per inviare i messaggi
     JButton bottoneConnetti = new JButton("Connetti");                      // Bottone di input per la connessione al Server
-    JButton bottoneHost = new JButton("Inserisci");                         // Bottone di input per l'inserimento e l'invio del Nome al Server
+    JButton bottoneHost = new JButton("Invia");                         // Bottone di input per l'inserimento e l'invio del Nome al Server
     JTextField input = new JTextField(50);                                  // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputIP = new JTextField(50);                                // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputPorta = new JTextField(50);                             // Elemento grafico per l'inserimento delle Stringhe
@@ -102,7 +102,7 @@ public class Client extends JFrame implements ActionListener
         indicazioneNomeHost.setBounds(7, 230, 200, 20);
         indicazioneNomeHost.setForeground(Color.WHITE);
         bottoneInput.setBounds(370, 210, 90, 20);
-        bottoneConnetti.setBounds(153, 160, 90, 20);
+        bottoneConnetti.setBounds(153, 160, 120, 20);
         bottoneHost.setBounds(370, 230, 90, 20);
 
         pannelloChat.add(chatMessaggio);
@@ -135,6 +135,7 @@ public class Client extends JFrame implements ActionListener
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.setTitle("Chat Client Server");
 
         // I Pulsanti stanno in ascolto per Glie Eventi
 
@@ -197,6 +198,8 @@ public class Client extends JFrame implements ActionListener
             {
                 chatMessaggio.append("Errore input, riprovare" + "\n"); // In Caso Di errore stampo la seguente Stringa
             }
+
+            input.setText("");
 
             if (!isEmpty() || stringaUtente.matches("/exit")) // Controllo se all'interno del messaggio è presente una stringa, quindi se ha senso inviare al Server il+ comando
             {
@@ -279,6 +282,7 @@ public class Client extends JFrame implements ActionListener
             {
                 threadAscolto = new Threadascolto(indalServer, outVersoServer, msocket, chatMessaggio); // Imposto il Thread che ascolterà i messaggi dal Server
                 threadAscolto.start(); // Lancio il Thread
+                this.setTitle(nomehost);
 
                 bottoneInput.setVisible(true);
                 bottoneHost.setVisible(false);
@@ -320,7 +324,7 @@ public class Client extends JFrame implements ActionListener
             Connetti();
             break;
 
-        case "Inserisci":
+        case "Invia":
 
             Inserisci();
 
