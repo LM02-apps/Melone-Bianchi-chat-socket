@@ -49,7 +49,7 @@ public class Threadascolto extends Thread
                     break;
                 }
                 
-                rispostaServer = rispostaServer.replace("Thread-0:", "Server:");
+                rispostaServer = rispostaServer.replace("AWT-EventQueue-0:", "Server:");
                 chatMessaggio.append(rispostaServer + "\n");
 
             }

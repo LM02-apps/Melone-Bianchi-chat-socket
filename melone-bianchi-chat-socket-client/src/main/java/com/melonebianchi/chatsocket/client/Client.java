@@ -95,14 +95,14 @@ public class Client extends JFrame implements ActionListener
         inputNomeHost.setFont(f);
         indicazione.setBounds(7, 210, 200, 20);
         indicazione.setForeground(Color.WHITE);
-        indicazioneIp.setBounds(203, 45, 200, 20);
+        indicazioneIp.setBounds(185, 45, 200, 20);
         indicazioneIp.setForeground(Color.WHITE);
-        indicazionePorta.setBounds(215, 100, 200, 20);
+        indicazionePorta.setBounds(195, 100, 200, 20);
         indicazionePorta.setForeground(Color.WHITE);
         indicazioneNomeHost.setBounds(7, 230, 200, 20);
         indicazioneNomeHost.setForeground(Color.WHITE);
         bottoneInput.setBounds(370, 210, 90, 20);
-        bottoneConnetti.setBounds(153, 160, 120, 20);
+        bottoneConnetti.setBounds(183, 160, 120, 20);
         bottoneHost.setBounds(370, 230, 90, 20);
 
         pannelloChat.add(chatMessaggio);
