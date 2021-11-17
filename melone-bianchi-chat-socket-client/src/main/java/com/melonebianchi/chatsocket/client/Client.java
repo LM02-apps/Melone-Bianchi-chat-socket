@@ -52,6 +52,9 @@ public class Client extends JFrame implements ActionListener
     JTextField inputPorta = new JTextField(50);                             // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputNomeHost = new JTextField(50);                          // Elemento grafico per l'inserimento delle Stringhe
     JTextArea chatMessaggio = new JTextArea();                              // Un'area di Testo per visualizzare la ricezzione e l'invio dei messaggi
+    ListModel listaNomi;
+    JList listaClient = new JList();
+    
 
     public Client()
      {
@@ -70,7 +73,7 @@ public class Client extends JFrame implements ActionListener
         Font f = new Font("Verdana", Font.BOLD, 14); // Impostazione Del Font
 
         pannelloChat.setLayout(null);
-        pannelloChat.setBounds(33, 0, 420, 200); // Impostazione Delle cordinate del pannello
+        pannelloChat.setBounds(0, 0, 360, 200); // Impostazione Delle cordinate del pannello
         pannelloChat.setBackground(Color.DARK_GRAY); // Impostazione del Colore
 
         pannelloPrincipale.setLayout(null);
@@ -84,6 +87,13 @@ public class Client extends JFrame implements ActionListener
         chatMessaggio.setBackground(Color.BLACK);
         chatMessaggio.setForeground(Color.WHITE);
         chatMessaggio.setEditable(false);
+
+        listaClient.setBounds(361, 0, 140, 200);
+        listaClient.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        listaClient.setLayoutOrientation(JList.VERTICAL);
+        listaClient.setVisibleRowCount(-1);
+        JScrollPane scrollPaneListaClient = new JScrollPane(listaClient);
+        scrollPaneListaClient.setBounds(361, 0, 140, 200);
 
         input.setBounds(153, 210, 200, 20);
         inputIP.setBounds(153, 70, 200, 20);
@@ -107,7 +117,7 @@ public class Client extends JFrame implements ActionListener
 
         pannelloChat.add(chatMessaggio);
         JScrollPane scrollPane = new JScrollPane(chatMessaggio); // Elemento Grafico per l'autoscorrimento dei messaggi
-        scrollPane.setBounds(0, 0, 4200, 200);
+        scrollPane.setBounds(0, 0, 360, 200);
         pannelloChat.add(scrollPane);
 
         // Aggiungo gli elementi Grafici al pannello Principale
@@ -123,6 +133,7 @@ public class Client extends JFrame implements ActionListener
         pannelloPrincipale.add(bottoneConnetti);
         pannelloPrincipale.add(indicazioneNomeHost);
         pannelloPrincipale.add(bottoneHost);
+        pannelloPrincipale.add(listaClient);
 
         c.add(pannelloChat);
         c.add(pannelloPrincipale);
@@ -150,6 +161,7 @@ public class Client extends JFrame implements ActionListener
         bottoneHost.setVisible(false);
         inputNomeHost.setVisible(false);
         indicazioneNomeHost.setVisible(false);
+
 
     }
 
@@ -280,7 +292,7 @@ public class Client extends JFrame implements ActionListener
             // inserirne un altro.
             if (stringaRispostaServer.equals("OK")) 
             {
-                threadAscolto = new Threadascolto(indalServer, outVersoServer, msocket, chatMessaggio); // Imposto il Thread che ascolterà i messaggi dal Server
+                threadAscolto = new Threadascolto(indalServer, outVersoServer, msocket, chatMessaggio, listaNomi); // Imposto il Thread che ascolterà i messaggi dal Server
                 threadAscolto.start(); // Lancio il Thread
                 this.setTitle(nomehost);
 

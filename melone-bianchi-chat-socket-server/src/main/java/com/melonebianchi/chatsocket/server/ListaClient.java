@@ -68,10 +68,14 @@ public class ListaClient
      * @throws IOException
      */
 
-    public void InvioPrivato(String messaggio, String nomeClientPrivato, String clientChiamata) throws IOException {
-        if (clientRunning.containsKey(nomeClientPrivato)) {
+    public void InvioPrivato(String messaggio, String nomeClientPrivato, String clientChiamata) throws IOException 
+    {
+        if (clientRunning.containsKey(nomeClientPrivato)) 
+        {
             clientRunning.get(nomeClientPrivato).InviaClient("(Privato) " + messaggio);
-        } else {
+        } 
+        else 
+        {
             messaggio = "Nome client inesistente";
             clientRunning.get(clientChiamata).InviaClient(messaggio);
         }
@@ -96,11 +100,13 @@ public class ListaClient
     {
         String listaClient = "";
 
-        for (Map.Entry<String, ThreadClient> e : clientRunning.entrySet()) {
-            listaClient += "\n" + clientRunning.get(e.getKey()).getName();
+        for (Map.Entry<String, ThreadClient> e : clientRunning.entrySet()) 
+        {
+            listaClient += ";" + clientRunning.get(e.getKey()).getName();
         }
 
-        for (Map.Entry<String, ThreadClient> e : clientRunning.entrySet()) {
+        for (Map.Entry<String, ThreadClient> e : clientRunning.entrySet()) 
+        {
             clientRunning.get(e.getKey()).InviaLista(listaClient);
         }
     }
