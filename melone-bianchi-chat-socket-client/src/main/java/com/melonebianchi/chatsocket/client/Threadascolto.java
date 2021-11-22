@@ -5,6 +5,8 @@ import java.io.*;
 import java.net.*;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
 
@@ -21,15 +23,15 @@ public class Threadascolto extends Thread
     DataOutputStream outServer;         //Stream per la ricezzione dei messaggi da parte del Server
     Socket socketClient;                //Socket
     JTextArea chatMessaggio = new JTextArea();  //Elemento gragfico per poter stampare a video i messaggi che arrivano.
-    ListModel listaNomi = new DefaultListModel();
+    DefaultListModel<String> model = new DefaultListModel<String>();
 
-    public Threadascolto(BufferedReader inServer, DataOutputStream outServer, Socket socketClient, JTextArea chatMessaggio, ListModel listaNomi)
+    public Threadascolto(BufferedReader inServer, DataOutputStream outServer, Socket socketClient, JTextArea chatMessaggio, JList<String> listaClient, DefaultListModel<String> model)
     {
         this.inServer = inServer;
         this.outServer = outServer;
         this.socketClient = socketClient;
         this.chatMessaggio = chatMessaggio;
-        this.listaNomi = listaNomi;
+        this.model = model;
     }
 
     public void run()
@@ -55,20 +57,23 @@ public class Threadascolto extends Thread
                     break;
                 }
 
-                if(rispostaServer.contains("Utenti Connessi:"))
+                if(rispostaServer.contains("Utenti Connessi:$$"))
                 {
-                    rispostaServer = rispostaServer.substring(16);
+                    model.removeAllElements();
+                    model.addElement("Globale");
+                    
+                    rispostaServer = rispostaServer.replace("Utenti Connessi:$$", "");
 
                     String[] utenti;
-                    String nomeUtente;
+                    String nomeUtente = "";
                     
                     
                         utenti = rispostaServer.split(";");
 
                        for(int i = 0; i < utenti.length; i++)
                        {
-                           nomeUtente = utenti[i];
-                           
+                           nomeUtente = utenti[i];   
+                           model.addElement(nomeUtente);
                        }
                 }
                 

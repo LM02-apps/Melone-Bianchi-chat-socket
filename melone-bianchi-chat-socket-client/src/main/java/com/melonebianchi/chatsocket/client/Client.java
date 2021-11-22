@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.DefaultCaret;
 import java.awt.event.*;
 
@@ -36,6 +38,8 @@ public class Client extends JFrame implements ActionListener
     String nomehost;                                // Variabile per inserire l'host in caso volessimo scrivere ad un Client
     String stringaRispostaServer;                   // Variabile per contenere la risposta del Server
     Threadascolto threadAscolto;                    // Thread per consentire la ricezzione dei messaggi da parte del Server
+    String clientSelezionato;
+    boolean globale = true;
 
     Container c = new Container();                                          // Contenitore
     JPanel pannelloPrincipale = new JPanel();                               // Pannello principale dove vengono aggiunti i vari componenti della Grafica
@@ -47,13 +51,14 @@ public class Client extends JFrame implements ActionListener
     JButton bottoneInput = new JButton("Esegui");                           // Bottone di input per inviare i messaggi
     JButton bottoneConnetti = new JButton("Connetti");                      // Bottone di input per la connessione al Server
     JButton bottoneHost = new JButton("Invia");                         // Bottone di input per l'inserimento e l'invio del Nome al Server
+    JButton bottoneAbbandonaChat = new JButton("Exit");
     JTextField input = new JTextField(50);                                  // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputIP = new JTextField(50);                                // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputPorta = new JTextField(50);                             // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputNomeHost = new JTextField(50);                          // Elemento grafico per l'inserimento delle Stringhe
     JTextArea chatMessaggio = new JTextArea();                              // Un'area di Testo per visualizzare la ricezzione e l'invio dei messaggi
-    ListModel listaNomi;
-    JList listaClient = new JList();
+    JList<String> listaClient = new JList<String>();
+    DefaultListModel<String> model = new DefaultListModel<String>();
     
 
     public Client()
@@ -92,6 +97,7 @@ public class Client extends JFrame implements ActionListener
         listaClient.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         listaClient.setLayoutOrientation(JList.VERTICAL);
         listaClient.setVisibleRowCount(-1);
+        listaClient.setModel(model);
         JScrollPane scrollPaneListaClient = new JScrollPane(listaClient);
         scrollPaneListaClient.setBounds(361, 0, 140, 200);
 
@@ -114,6 +120,8 @@ public class Client extends JFrame implements ActionListener
         bottoneInput.setBounds(370, 210, 90, 20);
         bottoneConnetti.setBounds(183, 160, 120, 20);
         bottoneHost.setBounds(370, 230, 90, 20);
+        bottoneAbbandonaChat.setBounds(370, 240, 90, 20);
+
 
         pannelloChat.add(chatMessaggio);
         JScrollPane scrollPane = new JScrollPane(chatMessaggio); // Elemento Grafico per l'autoscorrimento dei messaggi
@@ -134,6 +142,7 @@ public class Client extends JFrame implements ActionListener
         pannelloPrincipale.add(indicazioneNomeHost);
         pannelloPrincipale.add(bottoneHost);
         pannelloPrincipale.add(listaClient);
+        pannelloPrincipale.add(bottoneAbbandonaChat);
 
         c.add(pannelloChat);
         c.add(pannelloPrincipale);
@@ -153,6 +162,24 @@ public class Client extends JFrame implements ActionListener
         bottoneInput.addActionListener(this);
         bottoneConnetti.addActionListener(this);
         bottoneHost.addActionListener(this);
+        bottoneAbbandonaChat.addActionListener(this);
+
+        listaClient.addListSelectionListener(new ListSelectionListener()
+        {
+            public void valueChanged(ListSelectionEvent e)
+            {
+                clientSelezionato = listaClient.getSelectedValue();
+
+                if(clientSelezionato.equals("Globale"))
+                {
+                    globale = true;
+                }
+                else
+                {
+                    globale = false;
+                } 
+            }
+        });
 
         pannelloChat.setVisible(false);
         input.setVisible(false);
@@ -161,6 +188,8 @@ public class Client extends JFrame implements ActionListener
         bottoneHost.setVisible(false);
         inputNomeHost.setVisible(false);
         indicazioneNomeHost.setVisible(false);
+        listaClient.setVisible(false);
+        bottoneAbbandonaChat.setVisible(false);
 
 
     }
@@ -175,49 +204,24 @@ public class Client extends JFrame implements ActionListener
 
         try 
         {
-            stringaUtente = input.getText(); // Prendo il Testo dall'elemento grafico per interpretare il comando
+            messaggio = input.getText(); // Prendo il Testo dall'elemento grafico per interpretare il comando
 
-            String nomeUtente = "";
+            String nomeUtente = clientSelezionato;
 
-            if (stringaUtente.contains("/private ")) // Controllo Se Il Messaggio è Di Tipo privato. Ovvero vado a prendere il nome e il messaggio inserito per controllare se ci siano errori di sintassi
+            if(globale)
             {
-                for (int i = 9; i < stringaUtente.length(); i++)
-                 {
-
-                    if (stringaUtente.charAt(i) != ' ') 
-                    {
-                        nomeUtente += stringaUtente.charAt(i); // prendo il nome utente del Client con cui si vuole comunicare
-                    }
-                }
-
-                for (int i = 9 + nomeUtente.length(); i < stringaUtente.length(); i++) 
-                {
-                    messaggio += stringaUtente.charAt(i); // Prendo il messaggio che si vuole inviare
-                }
-            } 
-            else if (stringaUtente.contains("/all ")) // Controllo se il messaggio è di tipo globale.
+                chatMessaggio.append("invio stringa" + "\n");
+                outVersoServer.writeBytes("/all " + messaggio + "\n"); // Invio al Server
+            }
+            else
             {
-                for (int i = 4; i < stringaUtente.length(); i++) 
-                {
-                    messaggio += stringaUtente.charAt(i); // Prendo il messaggio che si vuole inviare
-                }
-            } 
-            else if (stringaUtente.contains("/exit")) // Controllo se l'utente decide di socllegarsi
-            {
-                bottoneInput.setVisible(false);
-            } 
-            else 
-            {
-                chatMessaggio.append("Errore input, riprovare" + "\n"); // In Caso Di errore stampo la seguente Stringa
+                chatMessaggio.append("invio stringa" + "\n");
+                outVersoServer.writeBytes("/private " + nomeUtente + " " + messaggio + "\n"); // Invio al Server
             }
 
             input.setText("");
 
-            if (!isEmpty() || stringaUtente.matches("/exit")) // Controllo se all'interno del messaggio è presente una stringa, quindi se ha senso inviare al Server il+ comando
-            {
-                chatMessaggio.append("invio stringa" + "\n");
-                outVersoServer.writeBytes(stringaUtente + "\n"); // Invio al Server
-            }
+            
         } 
         catch (Exception e) 
         {
@@ -292,7 +296,7 @@ public class Client extends JFrame implements ActionListener
             // inserirne un altro.
             if (stringaRispostaServer.equals("OK")) 
             {
-                threadAscolto = new Threadascolto(indalServer, outVersoServer, msocket, chatMessaggio, listaNomi); // Imposto il Thread che ascolterà i messaggi dal Server
+                threadAscolto = new Threadascolto(indalServer, outVersoServer, msocket, chatMessaggio, listaClient, model); // Imposto il Thread che ascolterà i messaggi dal Server
                 threadAscolto.start(); // Lancio il Thread
                 this.setTitle(nomehost);
 
@@ -302,6 +306,8 @@ public class Client extends JFrame implements ActionListener
                 inputNomeHost.setVisible(false);
                 indicazioneNomeHost.setVisible(false);
                 indicazione.setVisible(true);
+                listaClient.setVisible(true);
+                bottoneAbbandonaChat.setVisible(true);
             } 
             else 
             {
@@ -318,6 +324,12 @@ public class Client extends JFrame implements ActionListener
     public boolean isEmpty() // Controlla se il messaggio è vuoto o no(true = vuoto; false = non vuoto)
     {
         return messaggio.isEmpty();
+    }
+
+    public void Disconnetti() throws IOException
+    {
+        chatMessaggio.append("invio richiesta Disconnessione" + "\n");
+        outVersoServer.writeBytes("/exit" + "\n");                     // Invio al Server
     }
 
     /**
@@ -345,6 +357,18 @@ public class Client extends JFrame implements ActionListener
         case "Esegui":
             Comunica();
             break;
+
+        case "Exit":
+            try 
+            {
+                Disconnetti();
+            } 
+            catch (IOException e1) 
+            {
+                e1.printStackTrace();
+            }
+            break;
+            
         }
     }
 
