@@ -171,7 +171,7 @@ public class ThreadClient extends Thread
      */
 
     public void InviaLista(String lista) throws IOException {
-        outVersoClient.writeBytes("Utenti Connessi:" + lista + "\n");
+        outVersoClient.writeBytes("Utenti Connessi:$$" + lista + "\n");
     }
 
     /**
