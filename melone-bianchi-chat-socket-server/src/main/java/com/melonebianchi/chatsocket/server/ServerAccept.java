@@ -41,7 +41,7 @@ public class ServerAccept
             for (;;) // For per instanziare un Thread ogni volta che si connette un client
             {
                 System.out.println();
-                chatMessaggi.append("\n" + "Server:$ In Attesa..." + "\n");
+                chatMessaggi.append("\n" + "Server:$ In Attesa Sulla Porta 6778" + "\n");
 
                 client = server.accept(); // Il Server attende
 
