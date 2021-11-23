@@ -6,9 +6,7 @@ import java.net.*;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.ListModel;
 
 /**
  * Questa classe che è un Thread, permette l'ascolto dei messaggi che il Server invia.
@@ -57,24 +55,29 @@ public class Threadascolto extends Thread
                     break;
                 }
 
-                if(rispostaServer.contains("Utenti Connessi:$$"))
+                if(rispostaServer.contains("Utenti Connessi:$$"))//Questo if serve per controllare se da parte del Server arriva la nuova lista Client
                 {
-                    model.removeAllElements();
-                    model.addElement("Globale");
+                    model.removeAllElements();      //Rimuovo tutti i nomi dalla lista
+                    model.addElement("Globale");    
                     
-                    rispostaServer = rispostaServer.replace("Utenti Connessi:$$", "");
+                    rispostaServer = rispostaServer.replace("Utenti Connessi:$$", ""); //Elimino quello che non mi serve
 
-                    String[] utenti;
-                    String nomeUtente = "";
+                    String[] utenti;            //Array contenitore dove andranno tutti i nomi dei Client
+                    String nomeUtente = "";     //nome uternte
                     
                     
-                        utenti = rispostaServer.split(";");
+                        utenti = rispostaServer.split(";");     //Riempo l'Array
 
-                       for(int i = 0; i < utenti.length; i++)
+                       for(int i = 0; i < utenti.length; i++)   //For per inizzializare la lista
                        {
-                           nomeUtente = utenti[i];   
-                           model.addElement(nomeUtente);
+                           if(utenti[i].compareTo(Thread.currentThread().getName()) != 0)
+                           {    
+                                nomeUtente = utenti[i];   
+                                model.addElement(nomeUtente);       //Aggiungo i nomi alla lista
+                           }
                        }
+
+                       rispostaServer = "";
                 }
                 
                 rispostaServer = rispostaServer.replace("AWT-EventQueue-0:", "Server:");

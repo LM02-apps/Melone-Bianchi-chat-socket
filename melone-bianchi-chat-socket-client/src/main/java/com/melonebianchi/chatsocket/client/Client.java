@@ -16,7 +16,7 @@ import java.awt.event.*;
  * all'interno del Server. Il Client invia il nome e il Server risponde se il
  * nome Utente inserito è valido o no. in esito negativo dovremmo reinserire il
  * nome. In caso di esito positivo il Client può comunicare all'interno della
- * Chat con i seguenti comandi.
+ * Chat con i seguenti comandi:
  * 
  * /all + messaggio --> Questo invia un messaggio a tutti
  * 
@@ -24,6 +24,9 @@ import java.awt.event.*;
  * al Client che l'utente desidera.
  * 
  * /exit --> Il Client si disconnette dalla Chat.
+ * 
+ * NB: I seguenti comandi vengono generati a secondo dell'evento che l'utente sceglie, se comunicare con un client o con qualcuno in privato
+ *     o altrimenti l'evento di uscita della chat tramite bottone.
  */
 
 public class Client extends JFrame implements ActionListener 
@@ -50,8 +53,8 @@ public class Client extends JFrame implements ActionListener
     JLabel indicazioneNomeHost = new JLabel("Inserire Nome Host");          // Indicazione di Input per l'utente
     JButton bottoneInput = new JButton("Esegui");                           // Bottone di input per inviare i messaggi
     JButton bottoneConnetti = new JButton("Connetti");                      // Bottone di input per la connessione al Server
-    JButton bottoneHost = new JButton("Invia");                         // Bottone di input per l'inserimento e l'invio del Nome al Server
-    JButton bottoneAbbandonaChat = new JButton("Exit");
+    JButton bottoneHost = new JButton("Invia");                             // Bottone di input per l'inserimento e l'invio del Nome al Server
+    JButton bottoneAbbandonaChat = new JButton("Exit");                     //Bottone per abbandonare la Chat.
     JTextField input = new JTextField(50);                                  // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputIP = new JTextField(50);                                // Elemento grafico per l'inserimento delle Stringhe
     JTextField inputPorta = new JTextField(50);                             // Elemento grafico per l'inserimento delle Stringhe
@@ -164,13 +167,15 @@ public class Client extends JFrame implements ActionListener
         bottoneHost.addActionListener(this);
         bottoneAbbandonaChat.addActionListener(this);
 
+        //Qui il Client sta in ascolto di quale client viene selezionato all'interno della Lista.
+
         listaClient.addListSelectionListener(new ListSelectionListener()
         {
             public void valueChanged(ListSelectionEvent e)
             {
-                clientSelezionato = listaClient.getSelectedValue();
+                clientSelezionato = listaClient.getSelectedValue();     //Prendo il valore selezionato dal Client
 
-                if(clientSelezionato.equals("Globale"))
+                if(clientSelezionato == null || clientSelezionato.equals("Globale"))    //La if serve per capire se il Client vuole comunicare con tutti o con un singolo Client.
                 {
                     globale = true;
                 }
@@ -206,7 +211,7 @@ public class Client extends JFrame implements ActionListener
         {
             messaggio = input.getText(); // Prendo il Testo dall'elemento grafico per interpretare il comando
 
-            String nomeUtente = clientSelezionato;
+            String nomeUtente = clientSelezionato;      //Imposto il nome utente con il Client selezionato dall'Utente
 
             if(globale)
             {
@@ -255,7 +260,8 @@ public class Client extends JFrame implements ActionListener
                  {
                     e1.printStackTrace();
                 }
-
+                
+                //Rendo visibile gli elementi che mi servono o no
                 inputIP.setVisible(false);
                 inputPorta.setVisible(false);
                 indicazioneIp.setVisible(false);
@@ -297,7 +303,9 @@ public class Client extends JFrame implements ActionListener
             if (stringaRispostaServer.equals("OK")) 
             {
                 threadAscolto = new Threadascolto(indalServer, outVersoServer, msocket, chatMessaggio, listaClient, model); // Imposto il Thread che ascolterà i messaggi dal Server
+                threadAscolto.setName(nomehost);
                 threadAscolto.start(); // Lancio il Thread
+
                 this.setTitle(nomehost);
 
                 bottoneInput.setVisible(true);
@@ -314,9 +322,12 @@ public class Client extends JFrame implements ActionListener
                 chatMessaggio.append(stringaRispostaServer + "\n");
 
                 chatMessaggio.append("Reinserire Nuovo Nome:" + "\n");
+                inputNomeHost.setText("");
             }
 
-        } catch (NumberFormatException | IOException e1) {
+        } 
+        catch (NumberFormatException | IOException e1) 
+        {
             e1.printStackTrace();
         }
     }
@@ -362,8 +373,13 @@ public class Client extends JFrame implements ActionListener
             try 
             {
                 Disconnetti();
+                threadAscolto.join();
+                System.exit(1);
             } 
             catch (IOException e1) 
+            {
+                e1.printStackTrace();
+            } catch (InterruptedException e1) 
             {
                 e1.printStackTrace();
             }
